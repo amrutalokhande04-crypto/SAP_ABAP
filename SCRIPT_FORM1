@@ -1,0 +1,56 @@
+REPORT ZSCRIPTCODE_A1.
+
+TABLES: ZAMRUTA1.
+
+SELECTION-SCREEN: BEGIN OF BLOCK B2 WITH FRAME TITLE TEXT-000.
+  PARAMETERS: N_ROLLNO TYPE ZAMRUTA1-ROLLNO.
+SELECTION-SCREEN: END OF BLOCK B2.
+
+TYPES: BEGIN OF TY_STR,
+        ROLLNO TYPE ZROLLL,
+        NAME TYPE ZNAMEE,
+        CITY TYPE ZCITY01,
+       END OF TY_STR.
+
+DATA: IT TYPE TABLE OF TY_STR,
+       WA TYPE TY_STR.
+
+SELECT ROLLNO NAME CITY
+  FROM ZAMRUTA1 INTO TABLE IT.
+SORT IT BY ROLLNO.
+
+CALL FUNCTION 'OPEN_FORM'
+ EXPORTING
+
+   FORM                = 'ZSCRIPT_A1'
+   LANGUAGE            = SY-LANGU.
+
+ CALL FUNCTION 'START_FORM'
+  EXPORTING
+
+    FORM                   = 'ZSCRIPT_A1'
+    LANGUAGE               = SY-LANGU.
+
+LOOP AT IT INTO WA.
+
+CALL FUNCTION 'WRITE_FORM'
+ EXPORTING
+   ELEMENT                        = 'ITEMDATA'
+   WINDOW                         = 'MAIN'.
+
+CALL FUNCTION 'WRITE_FORM'
+ EXPORTING
+   ELEMENT                        = 'BOX'
+   FUNCTION                       = 'SET'
+   TYPE                           = 'BODY'
+   WINDOW                         = 'MAIN'.
+ ENDLOOP.
+
+**CALL FUNCTION 'WRITE_FORM'
+**   EXPORTING
+**     ELEMENT                        = 'NEXTPAGE'
+**     FUNCTION                       = 'SET'
+**     TYPE                           = 'BODY'
+**     WINDOW                         = 'MAIN'.
+CALL FUNCTION 'END_FORM'.
+  CALL FUNCTION 'CLOSE_FORM'.
